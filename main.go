@@ -21,6 +21,8 @@ var (
 	//用户需要传递的参数
 	//期望用户自己输入（CLI/GUI）
 	uploadFile = ""
+
+	help = false
 )
 
 // 实现文件上传的函数
@@ -55,8 +57,26 @@ func validate() error {
 }
 
 func loadParams() {
+	flag.BoolVar(&help, "h", false, "打印帮助信息")
 	flag.StringVar(&uploadFile, "f", "", "输入上传文件的名称")
 	flag.Parse()
+
+	// 判断CLI  是否需要打印Help信息
+	if help {
+		usage()
+	}
+}
+
+// 打印使用说明
+func usage() {
+	// 1、打印一些描述信息
+	fmt.Fprintf(os.Stderr, `cloud-station version: 0.0.1
+Usage: cloud-station [-h] -f <uplaod_file_path>
+Options:
+	`)
+
+	// 2、打印有哪些参数可以使用，就像 -f
+	flag.PrintDefaults()
 }
 
 func main() {
@@ -67,6 +87,8 @@ func main() {
 	//参数验证
 	if err := validate(); err != nil {
 		fmt.Printf("参数校验异常：%s\n", err)
+		usage()
+		os.Exit(1)
 	}
 
 	if err := upload(uploadFile); err != nil {
