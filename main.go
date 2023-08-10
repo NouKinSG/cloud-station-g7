@@ -40,7 +40,19 @@ func upload(file_path string) error {
 		return err
 	}
 	// 3、上传文件到该bucket
-	return bucket.PutObjectFromFile(file_path, file_path)
+	if err := bucket.PutObjectFromFile(file_path, file_path); err != nil {
+		return err
+	}
+
+	// 4、打印下载链接
+	downloadURL, err := bucket.SignURL(file_path, oss.HTTPGet, 60*60*24)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("文件下载URL： %s \n", downloadURL)
+	fmt.Println("请在一天内下载")
+
+	return nil
 }
 
 // 参数合法性检查
@@ -73,7 +85,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, `cloud-station version: 0.0.1
 Usage: cloud-station [-h] -f <uplaod_file_path>
 Options:
-	`)
+`)
 
 	// 2、打印有哪些参数可以使用，就像 -f
 	flag.PrintDefaults()
