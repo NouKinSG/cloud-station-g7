@@ -76,6 +76,7 @@ func loadParams() {
 	// 判断CLI  是否需要打印Help信息
 	if help {
 		usage()
+		os.Exit(0)
 	}
 }
 
