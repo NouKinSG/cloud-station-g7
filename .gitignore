@@ -1,6 +1,5 @@
 test.env
-
-
+etc/unit_test.env
 # Binaries for programs and plugins
 *.exe
 *.eXe~
@@ -10,8 +9,8 @@ test.env
 
 # Test binary,built with go test -c
 *.test
-etc/test.env
-
+etc/unit_test.env
+*.env
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 cloud-station.exe
