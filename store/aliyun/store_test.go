@@ -47,7 +47,7 @@ func TestUploadError(t *testing.T) {
 
 // 通过init 编写 upload实例化逻辑
 func init() {
-	ali, err := aliyun.NewAliOssStore(OssEndpoint, AccessKey, AccessKeySecret)
+	ali, err := aliyun.NewDefaultNewAliOssStore()
 	if err != nil {
 		panic(err)
 	}

@@ -2,6 +2,7 @@ package aliyun
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/NouKinSG/cloud-station-g7/store"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
@@ -12,9 +13,35 @@ var (
 	_ store.Uploader = &AliOssStore{}
 )
 
+type Options struct {
+	Endpoint      string
+	Accesskey     string
+	AccessSercret string
+}
+
+func (o *Options) validate() error {
+	if o.Endpoint == "" || o.Accesskey == "" || o.AccessSercret == "" {
+		return fmt.Errorf("endpint,acessKey,acessSecret is empty")
+	}
+	return nil
+}
+
+func NewDefaultNewAliOssStore() (*AliOssStore, error) {
+	return NewAliOssStore(&Options{
+		Endpoint:      os.Getenv("ALI_OSS_ENDPOINT"),
+		Accesskey:     os.Getenv("ALI_AK"),
+		AccessSercret: os.Getenv("ALI_SK"),
+	})
+}
+
 // AliOssStore 对象的构造
-func NewAliOssStore(endpoint, accesskey, accessSercret string) (*AliOssStore, error) {
-	c, err := oss.New(endpoint, accesskey, accessSercret)
+func NewAliOssStore(opts *Options) (*AliOssStore, error) {
+
+	if err := opts.validate(); err != nil {
+		return nil, err
+	}
+
+	c, err := oss.New(opts.Endpoint, opts.Accesskey, opts.AccessSercret)
 	if err != nil {
 		return nil, err
 	}
