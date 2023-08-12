@@ -1,5 +1,9 @@
 package tx
 
+func NewTxStore() *TxOssStore {
+	return &TxOssStore{}
+}
+
 type TxOssStore struct {
 }
 

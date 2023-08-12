@@ -1,5 +1,9 @@
 package aws
 
+func NewAwsOssStore() *AwsOssStore {
+	return &AwsOssStore{}
+}
+
 type AwsOssStore struct {
 }
 
