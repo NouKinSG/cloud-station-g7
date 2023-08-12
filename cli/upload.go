@@ -19,6 +19,11 @@ var (
 	uploadFile   string
 )
 
+const (
+	default_ak = "xx"
+	default_sk = "xxx"
+)
+
 var UploadCmd = &cobra.Command{
 	Use:     "upload",
 	Long:    "upload 文件上传",
@@ -33,11 +38,13 @@ var UploadCmd = &cobra.Command{
 
 		switch ossProvier {
 		case "aliyun":
-			uploader, err = aliyun.NewAliOssStore(&aliyun.Options{
+			aliOpts := &aliyun.Options{
 				Endpoint:      ossEndpoint,
-				Accesskey:     accessKey,
+				AccessKey:     accessKey,
 				AccessSercret: accessSecret,
-			})
+			}
+			setAliDefault(aliOpts)
+			uploader, err = aliyun.NewAliOssStore(aliOpts)
 		case "tx":
 			uploader = tx.NewTxStore()
 		case "aws":
@@ -55,6 +62,17 @@ var UploadCmd = &cobra.Command{
 		return uploader.Upload(bucketName, uploadFile, uploadFile)
 
 	},
+}
+
+func setAliDefault(opts *aliyun.Options) {
+	if opts.AccessKey == "" {
+		opts.AccessKey = default_ak
+	}
+
+	if opts.AccessSercret == "" {
+		opts.AccessSercret = default_sk
+	}
+
 }
 
 func init() {

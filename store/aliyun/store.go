@@ -15,12 +15,12 @@ var (
 
 type Options struct {
 	Endpoint      string
-	Accesskey     string
+	AccessKey     string
 	AccessSercret string
 }
 
 func (o *Options) validate() error {
-	if o.Endpoint == "" || o.Accesskey == "" || o.AccessSercret == "" {
+	if o.Endpoint == "" || o.AccessKey == "" || o.AccessSercret == "" {
 		return fmt.Errorf("endpint,acessKey,acessSecret is empty")
 	}
 	return nil
@@ -29,7 +29,7 @@ func (o *Options) validate() error {
 func NewDefaultNewAliOssStore() (*AliOssStore, error) {
 	return NewAliOssStore(&Options{
 		Endpoint:      os.Getenv("ALI_OSS_ENDPOINT"),
-		Accesskey:     os.Getenv("ALI_AK"),
+		AccessKey:     os.Getenv("ALI_AK"),
 		AccessSercret: os.Getenv("ALI_SK"),
 	})
 }
@@ -41,7 +41,7 @@ func NewAliOssStore(opts *Options) (*AliOssStore, error) {
 		return nil, err
 	}
 
-	c, err := oss.New(opts.Endpoint, opts.Accesskey, opts.AccessSercret)
+	c, err := oss.New(opts.Endpoint, opts.AccessKey, opts.AccessSercret)
 	if err != nil {
 		return nil, err
 	}
